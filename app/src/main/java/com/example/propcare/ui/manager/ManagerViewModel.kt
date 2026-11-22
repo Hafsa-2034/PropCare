@@ -23,13 +23,10 @@ class ManagerViewModel(
     private val complaintId: Int
 ) : ViewModel() {
 
-    // ADJUST HERE if Member 2's repository uses different names
-    // (e.g. repository.getComplaintById(complaintId) / getUsersByRole(...)).
-    val complaint: StateFlow<ComplaintEntity?> = repository.allComplaints
-        .map { list -> list.firstOrNull { it.id == complaintId } }
+    val complaint: StateFlow<ComplaintEntity?> = repository.getComplaintById(complaintId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    val technicians: StateFlow<List<UserEntity>> = repository.allUsers
+    val technicians: StateFlow<List<UserEntity>> = repository.getAllUsers()
         .map { users -> users.filter { it.role == UserRole.TECHNICIAN } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
@@ -66,8 +63,7 @@ class ManagerViewModel(
     private fun update(message: String, change: (ComplaintEntity) -> ComplaintEntity) {
         viewModelScope.launch {
             val current = complaint.value ?: return@launch
-            val updated = change(current).copy(updatedAt = System.currentTimeMillis())
-            repository.updateComplaint(updated)
+            repository.updateComplaint(change(current).copy(updatedAt = System.currentTimeMillis()))
             _messages.emit(message)
         }
     }
