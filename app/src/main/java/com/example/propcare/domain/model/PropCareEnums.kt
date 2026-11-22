@@ -1,3 +1,4 @@
+
 package com.example.propcare.domain.model
 
 enum class UserRole(val displayName: String) {
@@ -6,16 +7,25 @@ enum class UserRole(val displayName: String) {
     TECHNICIAN("Maintenance Staff")
 }
 
-enum class ComplaintPriority(val label: String) {
+enum class IssueCategory(val label: String) {
+    PLUMBING("Plumbing"),
+    ELECTRICAL("Electrical"),
+    STRUCTURAL("Structural"),
+    APPLIANCE("Appliance"),
+    HVAC("HVAC"),
+    GENERAL("General")
+}
+
+enum class PriorityLevel(val label: String) {
     LOW("Low"),
     MEDIUM("Medium"),
     HIGH("High"),
-    EMERGENCY("Emergency")
+    URGENT("Urgent")
 }
 
 enum class ComplaintStatus(val label: String) {
-    SUBMITTED("Submitted"),
+    OPEN("Open"),
     ASSIGNED("Assigned"),
     IN_PROGRESS("In Progress"),
-    COMPLETED("Completed")
+    RESOLVED("Resolved")
 }
