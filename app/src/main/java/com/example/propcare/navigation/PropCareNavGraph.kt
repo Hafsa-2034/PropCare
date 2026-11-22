@@ -14,6 +14,8 @@ import androidx.navigation.navArgument
 import com.example.propcare.domain.model.UserRole
 import com.example.propcare.ui.dashboard.DashboardScreen
 import com.example.propcare.ui.manager.ComplaintDetailScreen
+import com.example.propcare.ui.complaints.ComplaintListScreen
+import com.example.propcare.ui.complaints.SubmitComplaintScreen
 
 @Composable
 fun PropCareNavGraph(
@@ -40,15 +42,16 @@ fun PropCareNavGraph(
 
         // Member 3 plugs SubmitComplaintScreen & ComplaintListScreen here
         composable(Screen.SubmitComplaint.route) {
-            PlaceholderScreen("Submit Complaint (Member 3)")
-            // SubmitComplaintScreen(onNavigateBack = { navController.popBackStack() })
+            SubmitComplaintScreen(onNavigateBack = { navController.popBackStack() })
         }
 
         composable(Screen.ComplaintList.route) {
-            PlaceholderScreen("Complaint List (Member 3)")
-            // ComplaintListScreen(onComplaintClick = { id ->
-            //     navController.navigate(Screen.ComplaintDetail.createRoute(id))
-            // })
+            ComplaintListScreen(
+                onComplaintClick = { id ->
+                    navController.navigate(Screen.ComplaintDetail.createRoute(id))
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
         // Member 4 plugs Landlord Assignment/Priority details here
