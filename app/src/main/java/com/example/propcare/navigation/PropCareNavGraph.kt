@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.propcare.domain.model.UserRole
 import com.example.propcare.ui.dashboard.DashboardScreen
+import com.example.propcare.ui.manager.ComplaintDetailScreen
 
 @Composable
 fun PropCareNavGraph(
@@ -56,8 +57,10 @@ fun PropCareNavGraph(
             arguments = listOf(navArgument("complaintId") { type = NavType.IntType })
         ) { backStackEntry ->
             val complaintId = backStackEntry.arguments?.getInt("complaintId") ?: 0
-            PlaceholderScreen("Complaint Detail #$complaintId (Member 4)")
-            // ComplaintDetailScreen(complaintId = complaintId, onBack = { navController.popBackStack() })
+            ComplaintDetailScreen(
+                complaintId = complaintId,
+                onBack = { navController.popBackStack() }
+            )
         }
 
         // Member 5 plugs Technician Task & Completion Evidence screen here
