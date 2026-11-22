@@ -19,10 +19,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.propcare.PropCareApplication
 import com.example.propcare.domain.model.UserRole
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,11 +39,21 @@ fun DashboardScreen(
     onNavigateToComplaints: () -> Unit,
     onNavigateToTechTasks: () -> Unit,
     onNavigateToReports: () -> Unit,
-    // TODO (Member 2/6): Replace default counts with live Room StateFlow values once merged
-    totalComplaints: Int = 12,
-    pendingComplaints: Int = 5,
-    completedComplaints: Int = 7
+    // Optional overrides (kept so existing callers still compile). Null = use live Room counts.
+    totalComplaints: Int? = null,
+    pendingComplaints: Int? = null,
+    completedComplaints: Int? = null
 ) {
+    // Live KPI counts from Room via PropCareRepository
+    val repository = (LocalContext.current.applicationContext as PropCareApplication).container.repository
+    val liveTotal by remember(repository) { repository.getTotalComplaintCount() }.collectAsState(initial = 0)
+    val livePending by remember(repository) { repository.getPendingComplaintCount() }.collectAsState(initial = 0)
+    val liveCompleted by remember(repository) { repository.getCompletedComplaintCount() }.collectAsState(initial = 0)
+
+    val total = totalComplaints ?: liveTotal
+    val pending = pendingComplaints ?: livePending
+    val completed = completedComplaints ?: liveCompleted
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -83,21 +98,9 @@ fun DashboardScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                KpiCard(
-                    title = "Total",
-                    count = totalComplaints,
-                    modifier = Modifier.weight(1f)
-                )
-                KpiCard(
-                    title = "Pending",
-                    count = pendingComplaints,
-                    modifier = Modifier.weight(1f)
-                )
-                KpiCard(
-                    title = "Completed",
-                    count = completedComplaints,
-                    modifier = Modifier.weight(1f)
-                )
+                KpiCard(title = "Total", count = total, modifier = Modifier.weight(1f))
+                KpiCard(title = "Pending", count = pending, modifier = Modifier.weight(1f))
+                KpiCard(title = "Completed", count = completed, modifier = Modifier.weight(1f))
             }
 
             // 3. Role-Specific Quick Action Cards
