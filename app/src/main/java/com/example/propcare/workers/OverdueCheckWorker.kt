@@ -25,8 +25,7 @@ class OverdueCheckWorker(
     override suspend fun doWork(): Result {
         return try {
             val container = (applicationContext as PropCareApplication).container
-            // ASSUMPTION: repository exposes allComplaints: Flow<List<ComplaintEntity>>
-            val complaints = container.repository.allComplaints.first()
+            val complaints = container.repository.getAllComplaints().first()
 
             val unresolved = complaints.filter { it.status != ComplaintStatus.RESOLVED }
             val urgent = unresolved.count {

@@ -16,6 +16,9 @@ import com.example.propcare.ui.dashboard.DashboardScreen
 import com.example.propcare.ui.manager.ComplaintDetailScreen
 import com.example.propcare.ui.complaints.ComplaintListScreen
 import com.example.propcare.ui.complaints.SubmitComplaintScreen
+import androidx.compose.ui.platform.LocalContext
+import com.example.propcare.PropCareApplication
+import com.example.propcare.ui.dashboard.ReportsScreen
 
 @Composable
 fun PropCareNavGraph(
@@ -73,9 +76,13 @@ fun PropCareNavGraph(
         }
 
         // Member 6 plugs Historical Maintenance Reports screen here
+        // Member 6 plugs Historical Maintenance Reports screen here
         composable(Screen.Reports.route) {
-            PlaceholderScreen("Maintenance Reports (Member 6)")
-            // ReportsScreen(...)
+            val container = (LocalContext.current.applicationContext as PropCareApplication).container
+            ReportsScreen(
+                repository = container.repository,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
     }
 }

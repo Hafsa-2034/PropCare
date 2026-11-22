@@ -10,5 +10,6 @@ class PropCareApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+
     }
 }

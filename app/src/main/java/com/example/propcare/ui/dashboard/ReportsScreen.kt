@@ -20,8 +20,8 @@ fun ReportsScreen(
     repository: PropCareRepository,
     onNavigateBack: () -> Unit
 ) {
-    // ASSUMPTION: repository.allComplaints: Flow<List<ComplaintEntity>>
-    val complaints by repository.allComplaints.collectAsState(initial = emptyList())
+    val complaintsFlow = remember(repository) { repository.getAllComplaints() }
+    val complaints by complaintsFlow.collectAsState(initial = emptyList())
 
     val total = complaints.size
     val resolved = complaints.count { it.status == ComplaintStatus.RESOLVED }
