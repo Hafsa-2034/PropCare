@@ -77,7 +77,7 @@ fun PropCareNavGraph(
             val viewModel = remember {
                 TechnicianViewModel(
                     repository = container.repository,
-                    technicianId = 1,
+                    technicianId = 3,
                 )
             }
 
